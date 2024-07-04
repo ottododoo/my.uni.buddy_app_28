@@ -1,8 +1,3 @@
-pip install -qqq -U langchain-huggingface
-pip install -qqq -U langchain
-pip install -qqq -U langchain-community
-pip install -qqq -U faiss-cpu
-
 from langchain_huggingface import HuggingFaceEndpoint, HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
