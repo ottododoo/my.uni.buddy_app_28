@@ -102,3 +102,4 @@ if prompt := st.chat_input("How may I help you?"):
 
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
+
