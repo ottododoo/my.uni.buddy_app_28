@@ -7,4 +7,3 @@ langchain==0.2.6
 langsmith==0.1.77
 faiss-cpu==1.8.0.post1
 langchain==0.2.6
-pip==23.2.1
