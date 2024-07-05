@@ -1,3 +1,1 @@
-streamlit
-langchain
-langchain_huggingface
+streamlit==1.35.0
