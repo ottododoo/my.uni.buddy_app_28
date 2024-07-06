@@ -6,13 +6,10 @@ from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
 
 # Hugging Face model details
-
-headers = {
-    "Authorization": st.secrets["SECRET_NAME"]
-}
-
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
-llm = HuggingFaceEndpoint(repo_id=hf_model, huggingfacehub_api_token = headers)
+huggingfacehub_api_token = st.secrets["SECRET_NAME"]
+
+llm = HuggingFaceEndpoint(repo_id=hf_model, huggingfacehub_api_token=huggingfacehub_api_token)
 
 # Embedding model details
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
