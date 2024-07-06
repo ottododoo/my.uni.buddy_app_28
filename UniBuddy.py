@@ -12,7 +12,7 @@ from requests.exceptions import HTTPError
 
 
 # Retrieve the Hugging Face API key
-hf_api_key = st.screts['SECRET_NAME']
+hf_api_key = st.secrets['SECRET_NAME']
 
 # Initialize Hugging Face endpoint with token in model_kwargs
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
