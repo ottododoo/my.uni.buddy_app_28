@@ -7,13 +7,12 @@ import streamlit as st
 from dotenv import load_dotenv
 import os
 
+load_dotenv()
+hf_api_key = os.getenv('ScretName')
+
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model)
-
-load_dotenv()
-
-hf_api_key = os.getenv('ScretName')
 
 # Embedding model details
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
