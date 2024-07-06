@@ -5,14 +5,16 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
 
+# Set your Hugging Face API token as a secret using Streamlit's secrets feature
+st.secrets["HUGGINGFACEHUB_API_TOKEN"] = "SECRET_NAME"  # Replace with your actual API token
+
+# Retrieve the API token from secrets
+huggingfacehub_api_token = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
+
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
-huggingfacehub_api_token = st.secrets["SECRET_NAME"]  # Assuming this fetches your API token
 
-print(f"hf_model: {hf_model}")
-print(f"huggingfacehub_api_token: {huggingfacehub_api_token}")
-
-# Initialize HuggingFaceEndpoint
+# Initialize HuggingFaceEndpoint with the model and API token
 llm = HuggingFaceEndpoint(repo_id=hf_model, huggingfacehub_api_token=huggingfacehub_api_token)
 
 # Embedding model details
@@ -52,15 +54,14 @@ st.title("My.Unibuddy_Germany: Your Guide to Studying and living in Germany")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-   st.image("Design ohne Titel (2).png")
+    st.image("Design ohne Titel (2).png")
 
 with col2:
-   st.image("Design ohne Titel (1).png")
+    st.image("Design ohne Titel (1).png")
 
 with col3:
-   st.image("Design ohne Titel.png")
+    st.image("Design ohne Titel.png")
     
-
 st.sidebar.title("Popular Questions")
 st.sidebar.markdown("""
 - What are the requirements to study in Germany?
