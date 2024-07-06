@@ -6,12 +6,11 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain_community.vectorstores import FAISS
 
 import streamlit as st
-
-
-# Hugging Face model details
-hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
+import requests
+import time
 
 # Initialize HuggingFaceEndpoint with the model and API token
+hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model)
 
 # Embedding model details
@@ -77,6 +76,9 @@ st.sidebar.markdown("""
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Lambda function with retry logic
+make_hf_request = lambda llm, prompt: llm(prompt) if llm(prompt) else (time.sleep(60), make_hf_request(llm, prompt))
+
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -95,7 +97,7 @@ if prompt := st.chat_input("How may I help you?"):
     with st.spinner("Uncovering knowledge about studying in Germany..."):
 
         # Send question to chain to get answer
-        answer = chain(prompt)
+        answer = make_hf_request(chain, prompt)
 
         # Extract answer from dictionary returned by chain
         response = answer["answer"]
