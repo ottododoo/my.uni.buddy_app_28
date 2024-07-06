@@ -9,7 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 
 # Load environment variables
 load_dotenv()
-hf_api_key = os.getenv('SecretName')
+hf_api_key = os.getenv('SECRET_NAME')
 
 # Check if API token is set
 if not hf_api_key:
@@ -117,4 +117,5 @@ if user_input := st.chat_input("How may I help you?"):
             st.error(f"An error occurred: {e}")
             if hasattr(e, 'response'):
                 st.error(f"Response: {e.response}")
+
 
