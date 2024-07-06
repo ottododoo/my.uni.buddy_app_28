@@ -4,10 +4,16 @@ from langchain_core.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
+from dotenv import load_dotenv
+import os
 
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model)
+
+load_dotenv()
+
+hf_api_key = os.getenv('ScretName')
 
 # Embedding model details
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
