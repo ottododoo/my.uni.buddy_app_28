@@ -15,10 +15,6 @@ load_dotenv()
 # Retrieve the Hugging Face API key
 hf_api_key = os.getenv('SECRET_NAME')
 
-# Check if API token is set
-if not hf_api_key:
-    raise ValueError("Hugging Face API token is not set in the environment variables.")
-
 # Initialize Hugging Face endpoint with token in model_kwargs
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model, model_kwargs={"token": hf_api_key})
