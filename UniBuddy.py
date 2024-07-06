@@ -5,8 +5,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
 
-# Retrieve the Hugging Face API token from secrets
-huggingfacehub_api_token = st.secrets.get("AB")
 
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
