@@ -11,9 +11,13 @@ from langchain.chains import ConversationalRetrievalChain
 load_dotenv()
 hf_api_key = os.getenv('SECRET_NAME')
 
-# Initialize Hugging Face endpoint
+# Check if API token is set
+if not hf_api_key:
+    raise ValueError("Hugging Face API token is not set in the environment variables.")
+
+# Initialize Hugging Face endpoint with token in model_kwargs
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
-llm = HuggingFaceEndpoint(repo_id=hf_model, token=hf_api_key)
+llm = HuggingFaceEndpoint(repo_id=hf_model, model_kwargs={"token": hf_api_key})
 
 # Initialize embeddings model
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
@@ -113,5 +117,6 @@ if user_input := st.chat_input("How may I help you?"):
             st.error(f"An error occurred: {e}")
             if hasattr(e, 'response'):
                 st.error(f"Response: {e.response}")
+
 
 
