@@ -13,6 +13,7 @@ hf_api_key = os.getenv('SECRET_NAME')
 
 # Initialize Hugging Face endpoint with token in model_kwargs
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
+llm = HuggingFaceEndpoint(repo_id=hf_model)
 
 # Initialize embeddings model
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
