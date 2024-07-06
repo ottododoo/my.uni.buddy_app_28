@@ -9,11 +9,10 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from requests.exceptions import HTTPError
 
-# Load environment variables from .env file
-load_dotenv()
+
 
 # Retrieve the Hugging Face API key
-hf_api_key = os.getenv('SECRET_NAME')
+hf_api_key = st.scret('SECRET_NAME')
 
 # Initialize Hugging Face endpoint with token in model_kwargs
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
