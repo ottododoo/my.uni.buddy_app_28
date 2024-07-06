@@ -6,7 +6,7 @@ from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
 
 # Set your Hugging Face API token as a secret using Streamlit's secrets feature
-st.secrets["HUGGINGFACEHUB_API_TOKEN"] = "SECRET_NAME"  # Replace with your actual API token
+st.secrets["HUGGINGFACEHUB_API_TOKEN"] = "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"  # Replace with your actual API token
 
 # Retrieve the API token from secrets
 huggingfacehub_api_token = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
