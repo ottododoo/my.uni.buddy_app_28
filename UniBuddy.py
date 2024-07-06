@@ -6,10 +6,16 @@ from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
 
 # Retrieve the Hugging Face API token from secrets
-huggingfacehub_api_token = st.secrets["AB"]
+huggingfacehub_api_token = st.secrets.get("AB")
+
+if not huggingfacehub_api_token:
+    raise ValueError("Hugging Face API token not found in secrets.")
 
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
+
+print(f"hf_model: {hf_model}")
+print(f"huggingfacehub_api_token: {huggingfacehub_api_token}")
 
 # Initialize HuggingFaceEndpoint with the model and API token
 llm = HuggingFaceEndpoint(repo_id=hf_model, huggingfacehub_api_token=huggingfacehub_api_token)
