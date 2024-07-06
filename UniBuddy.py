@@ -10,7 +10,7 @@ import streamlit as st
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 
 # Initialize HuggingFaceEndpoint with the model and API token
-llm = HuggingFaceEndpoint(repo_id=hf_model, huggingfacehub_api_token= "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")
+llm = HuggingFaceEndpoint(repo_id=hf_model)
 
 # Embedding model details
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
