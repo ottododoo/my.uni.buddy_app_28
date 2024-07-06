@@ -43,6 +43,16 @@ prompt = PromptTemplate(template=template, input_variables=["context", "question
 chain = ConversationalRetrievalChain.from_llm(llm, retriever=retriever, memory=memory,
                                               return_source_documents=True,
                                               combine_docs_chain_kwargs={"prompt": prompt})
+from langchain.chains import ConversationalRetrievalChain
+
+# Your existing setup and configuration
+
+try:
+    answer = chain(prompt)
+except Exception as e:
+    print(f"An error occurred: {e}")
+    # Additional logging or error handling as needed
+
 
 ##### Streamlit App #####
 
