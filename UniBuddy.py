@@ -7,8 +7,9 @@ import streamlit as st
 
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
-huggingfacehub_api_token = st.secrets["SECRET_NAME"]
+huggingfacehub_api_token = st.secrets["SECRET_NAME"]  # Assuming this fetches your API token
 
+# Initialize HuggingFaceEndpoint
 llm = HuggingFaceEndpoint(repo_id=hf_model, huggingfacehub_api_token=huggingfacehub_api_token)
 
 # Embedding model details
