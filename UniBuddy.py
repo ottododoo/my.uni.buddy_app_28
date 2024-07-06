@@ -3,6 +3,8 @@ from langchain.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain_community.vectorstores import FAISS
+
 import streamlit as st
 
 
