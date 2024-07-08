@@ -9,7 +9,7 @@ import getpass
 import os
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["SECRET_NAME"] = getpass.getpass()
+os.environ["AB"] = getpass.getpass()
 
 
 # Initialize HuggingFaceEndpoint with the model and API token
