@@ -145,3 +145,6 @@ if prompt := st.chat_input("How may I help you?"):
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
+
+
