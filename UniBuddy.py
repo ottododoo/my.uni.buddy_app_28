@@ -5,6 +5,11 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.vectorstores import FAISS
 import streamlit as st
+import getpass
+import os
+
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["SECRET_NAME"] = getpass.getpass()
 
 
 # Initialize HuggingFaceEndpoint with the model and API token
