@@ -118,4 +118,30 @@ for message in st.session_state.messages:
 if prompt := st.chat_input("How may I help you?"):
 
     # Display user message in chat message container
-    st.chat_messag
+    st.chat_message("user").markdown(prompt)
+
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    # Begin spinner before answering question so it's there for the duration
+    with st.spinner("Uncovering knowledge about studying in Germany..."):
+
+        try:
+            # Send question to chain to get answer with retry logic
+            answer = make_hf_request(chain, prompt)
+
+            if answer:
+                # Extract answer from dictionary returned by chain
+                response = answer["answer"]
+
+                # Display chatbot response in chat message container
+                with st.chat_message("assistant"):
+                    st.markdown(response)
+
+                # Add assistant response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": response})
+            else:
+                st.warning("Failed to get a valid response. Please try again later.")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
