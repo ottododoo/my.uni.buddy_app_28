@@ -7,6 +7,9 @@ from langchain_community.vectorstores import FAISS
 import streamlit as st
 import os
 from dotenv import load_dotenv
+import time
+import requests
+
 # Load environment variables from the '.env' file
 
 load_dotenv(" '.env' ")
@@ -14,12 +17,6 @@ load_dotenv(" '.env' ")
 # Use the environment variable in your Hugging Face Endpoint initialization
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model, api_token=os.getenv("HF_API_TOKEN"))
-
-
-
-# Initialize HuggingFaceEndpoint with the model and API token
-hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
-llm = HuggingFaceEndpoint(repo_id=hf_model)
 
 # Embedding model details
 embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
@@ -94,7 +91,7 @@ def make_hf_request(llm, prompt, max_retries=3):
             if response:
                 return response
             else:
-                time.sleep(20)  # Sleep for 60 seconds before retrying
+                time.sleep(5)  # Sleep for 60 seconds before retrying
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 429:
                 print("Rate limit reached. Waiting for 60 seconds before retrying...")
