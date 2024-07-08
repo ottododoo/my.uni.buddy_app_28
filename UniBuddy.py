@@ -5,7 +5,8 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.vectorstores import FAISS
 import streamlit as st
-import osfrom dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
 # Load environment variables from the '.env' file
 
 load_dotenv(" '.env' ")
