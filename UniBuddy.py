@@ -5,11 +5,15 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.vectorstores import FAISS
 import streamlit as st
-import getpass
-import os
+import osfrom dotenv import load_dotenv
+# Load environment variables from the '.env' file
 
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["AB"] = getpass.getpass()
+load_dotenv(" '.env' ")
+
+# Use the environment variable in your Hugging Face Endpoint initialization
+hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
+llm = HuggingFaceEndpoint(repo_id=hf_model, api_token=os.getenv("HF_API_TOKEN"))
+
 
 
 # Initialize HuggingFaceEndpoint with the model and API token
