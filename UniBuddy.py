@@ -3,18 +3,19 @@ from langchain.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
-from langchain_community.vectorstores import FAISS
+from dotenv import load_dotenv
 import streamlit as st
 import os
-from dotenv import load_dotenv
 import time
 import requests
 
 # Load environment variables from the '.env' file
+load_dotenv(".env")
 
-load_dotenv(" '.env' ")
+# Set your API token directly as an environment variable
+os.environ["HF_API_TOKEN"] = "your_hugging_face_api_token_here"
 
-# Use the environment variable in your Hugging Face Endpoint initialization
+# Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model, api_token=os.getenv("HF_API_TOKEN"))
 
@@ -78,35 +79,6 @@ st.sidebar.markdown("""
 """)
 
 # Initialize chat history
-
-
-import time
-import requests
-
-def make_hf_request(llm, prompt, max_retries=3):
-    retries = 0
-    while retries < max_retries:
-        try:
-            response = llm(prompt)
-            if response:
-                return response
-            else:
-                time.sleep(5)  # Sleep for 60 seconds before retrying
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 429:
-                print("Rate limit reached. Waiting for 60 seconds before retrying...")
-                time.sleep(60)
-            else:
-                print(f"HTTP error occurred: {e}")
-                raise  # Rethrow the exception for other HTTP errors
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            raise  # Rethrow any other unexpected exceptions
-
-    # If retries exceed max_retries without success, handle it accordingly
-    print(f"Failed to get a valid response after {max_retries} retries.")
-    return None
-
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -127,15 +99,50 @@ if prompt := st.chat_input("How may I help you?"):
     # Begin spinner before answering question so it's there for the duration
     with st.spinner("Uncovering knowledge about studying in Germany..."):
 
-        # Send question to chain to get answer with retry logic
-        answer = make_hf_request(chain, prompt)
+        try:
+            # Send question to chain to get answer with retry logic
+            answer = make_hf_request(chain, prompt)
 
-        # Extract answer from dictionary returned by chain
-        response = answer["answer"]
+            if answer:
+                # Extract answer from dictionary returned by chain
+                response = answer["answer"]
 
-        # Display chatbot response in chat message container
-        with st.chat_message("assistant"):
-            st.markdown(response)
+                # Display chatbot response in chat message container
+                with st.chat_message("assistant"):
+                    st.markdown(response)
 
-        # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": response})
+                # Add assistant response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": response})
+            else:
+                st.warning("Failed to get a valid response. Please try again later.")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+# Function to handle Hugging Face API requests with retry logic
+def make_hf_request(llm, prompt, max_retries=3):
+    retries = 0
+    while retries < max_retries:
+        try:
+            response = llm(prompt)
+            if response:
+                return response
+            else:
+                time.sleep(5)  # Sleep for 5 seconds before retrying
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                print("Rate limit reached. Waiting for 60 seconds before retrying...")
+                time.sleep(60)
+            else:
+                print(f"HTTP error occurred: {e}")
+                raise  # Rethrow the exception for other HTTP errors
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            raise  # Rethrow any other unexpected exceptions
+
+        retries += 1
+
+    # If retries exceed max_retries without success, handle it accordingly
+    print(f"Failed to get a valid response after {max_retries} retries.")
+    return None
+
