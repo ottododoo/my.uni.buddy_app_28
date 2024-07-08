@@ -1,3 +1,5 @@
+import time
+import requests
 from langchain_huggingface import HuggingFaceEndpoint, HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
@@ -6,8 +8,6 @@ from langchain.chains import ConversationalRetrievalChain
 from dotenv import load_dotenv
 import streamlit as st
 import os
-import time
-import requests
 
 # Load environment variables from the '.env' file
 load_dotenv(".env")
@@ -27,8 +27,8 @@ def make_hf_request(llm, prompt, max_retries=3):
                 time.sleep(5)  # Sleep for 5 seconds before retrying
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 429:
-                print("Rate limit reached. Waiting for 60 seconds before retrying...")
-                time.sleep(60)
+                print("Rate limit reached. Waiting for 10 seconds before retrying...")
+                time.sleep(10)
             else:
                 print(f"HTTP error occurred: {e}")
                 raise  # Rethrow the exception for other HTTP errors
@@ -118,30 +118,4 @@ for message in st.session_state.messages:
 if prompt := st.chat_input("How may I help you?"):
 
     # Display user message in chat message container
-    st.chat_message("user").markdown(prompt)
-
-    # Add user message to chat history
-    st.session_state.messages.append({"role": "user", "content": prompt})
-
-    # Begin spinner before answering question so it's there for the duration
-    with st.spinner("Uncovering knowledge about studying in Germany..."):
-
-        try:
-            # Send question to chain to get answer with retry logic
-            answer = make_hf_request(chain, prompt)
-
-            if answer:
-                # Extract answer from dictionary returned by chain
-                response = answer["answer"]
-
-                # Display chatbot response in chat message container
-                with st.chat_message("assistant"):
-                    st.markdown(response)
-
-                # Add assistant response to chat history
-                st.session_state.messages.append({"role": "assistant", "content": response})
-            else:
-                st.warning("Failed to get a valid response. Please try again later.")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+    st.chat_messag
