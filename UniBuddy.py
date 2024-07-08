@@ -15,6 +15,33 @@ load_dotenv(".env")
 # Set your API token directly as an environment variable
 os.environ["HF_API_TOKEN"] = "your_hugging_face_api_token_here"
 
+# Function to handle Hugging Face API requests with retry logic
+def make_hf_request(llm, prompt, max_retries=3):
+    retries = 0
+    while retries < max_retries:
+        try:
+            response = llm(prompt)
+            if response:
+                return response
+            else:
+                time.sleep(5)  # Sleep for 5 seconds before retrying
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                print("Rate limit reached. Waiting for 60 seconds before retrying...")
+                time.sleep(60)
+            else:
+                print(f"HTTP error occurred: {e}")
+                raise  # Rethrow the exception for other HTTP errors
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            raise  # Rethrow any other unexpected exceptions
+
+        retries += 1
+
+    # If retries exceed max_retries without success, handle it accordingly
+    print(f"Failed to get a valid response after {max_retries} retries.")
+    return None
+
 # Hugging Face model details
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
 llm = HuggingFaceEndpoint(repo_id=hf_model, api_token=os.getenv("HF_API_TOKEN"))
@@ -118,31 +145,3 @@ if prompt := st.chat_input("How may I help you?"):
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
-
-# Function to handle Hugging Face API requests with retry logic
-def make_hf_request(llm, prompt, max_retries=3):
-    retries = 0
-    while retries < max_retries:
-        try:
-            response = llm(prompt)
-            if response:
-                return response
-            else:
-                time.sleep(5)  # Sleep for 5 seconds before retrying
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 429:
-                print("Rate limit reached. Waiting for 60 seconds before retrying...")
-                time.sleep(60)
-            else:
-                print(f"HTTP error occurred: {e}")
-                raise  # Rethrow the exception for other HTTP errors
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            raise  # Rethrow any other unexpected exceptions
-
-        retries += 1
-
-    # If retries exceed max_retries without success, handle it accordingly
-    print(f"Failed to get a valid response after {max_retries} retries.")
-    return None
-
