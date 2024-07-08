@@ -81,6 +81,35 @@ st.sidebar.markdown("""
 """)
 
 # Initialize chat history
+
+
+import time
+import requests
+
+def make_hf_request(llm, prompt, max_retries=3):
+    retries = 0
+    while retries < max_retries:
+        try:
+            response = llm(prompt)
+            if response:
+                return response
+            else:
+                time.sleep(20)  # Sleep for 60 seconds before retrying
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                print("Rate limit reached. Waiting for 60 seconds before retrying...")
+                time.sleep(60)
+            else:
+                print(f"HTTP error occurred: {e}")
+                raise  # Rethrow the exception for other HTTP errors
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            raise  # Rethrow any other unexpected exceptions
+
+    # If retries exceed max_retries without success, handle it accordingly
+    print(f"Failed to get a valid response after {max_retries} retries.")
+    return None
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
